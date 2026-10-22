@@ -1,4 +1,4 @@
-package com.example.kaucjuszGo;
+package com.kaucjuszGo;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

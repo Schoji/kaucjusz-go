@@ -1,4 +1,4 @@
-package com.example.kaucjuszGo;
+package com.kaucjuszGo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
