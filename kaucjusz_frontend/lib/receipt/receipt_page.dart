@@ -1,23 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+import 'package:flutter/services.dart';
 
-Future<String> initCamera() async {
+Future<CameraController> initCamera() async {
   final availableCams = await availableCameras();
 
   if (availableCams.isEmpty) {
-    print("No cameras found");
+    throw Exception("No camera");
   }
 
-  final cam = availableCams.where(
-    (camera) => camera.lensDirection == CameraLensDirection.back,
+  final cam = availableCams
+      .where((camera) => camera.lensDirection == CameraLensDirection.back)
+      .firstOrNull;
+
+  if (cam == null) throw Exception("No valid back camera found");
+
+  final controller = CameraController(
+    cam,
+    ResolutionPreset.high,
+    enableAudio: false,
   );
-
-  print(cam);
-
-  return "lol";
+  await controller.initialize();
+  await controller.lockCaptureOrientation(DeviceOrientation.portraitUp);
+  await controller.setFocusMode(FocusMode.auto);
+  return controller;
 }
-
-late Future<String> camFuture;
 
 class ReceiptPage extends StatefulWidget {
   const ReceiptPage({super.key});
@@ -27,27 +34,46 @@ class ReceiptPage extends StatefulWidget {
 }
 
 class _ReceiptPageState extends State<ReceiptPage> {
+  late Future<CameraController> controllerFuture;
+
   @override
   void initState() {
-    camFuture = initCamera();
+    controllerFuture = initCamera();
     super.initState();
   }
 
   @override
+  void dispose() {
+    controllerFuture.then((c) => c.dispose());
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      child: FutureBuilder(
-        future: camFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState != ConnectionState.done) {
-            return const CircularProgressIndicator(); // jeszcze czekamy
-          }
-          if (snapshot.hasError) {
-            return Text('Błąd: ${snapshot.error}');
-          }
-          return Text(snapshot.data!); // gotowe
-        },
-      ),
+    return FutureBuilder(
+      future: controllerFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState != ConnectionState.done) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          ); // jeszcze czekamy
+        }
+        if (snapshot.hasError) {
+          return Text('Błąd: ${snapshot.error}');
+        }
+        final controller = snapshot.data!;
+        final size = controller.value.previewSize!;
+        return SizedBox.expand(
+          child: FittedBox(
+            fit: BoxFit.cover,
+            child: SizedBox(
+              height: size.width,
+              width: size.height,
+              child: CameraPreview(controller),
+            ),
+          ),
+        ); // gotowe
+      },
     );
   }
 }

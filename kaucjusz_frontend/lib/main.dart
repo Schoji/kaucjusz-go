@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:kaucjusz_go/pet/pet_page.dart';
 import 'package:kaucjusz_go/map/map_page.dart';
 import 'package:kaucjusz_go/receipt/receipt_page.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(const MainApp());
 }
 
@@ -25,7 +27,8 @@ class _MainAppState extends State<MainApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(),
+        appBar: _selectedIndex != 2 ? AppBar() : null,
+        extendBodyBehindAppBar: _selectedIndex == 2 ? true : false,
         body: _screens[_selectedIndex],
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: _selectedIndex, // Highlight the selected tab
