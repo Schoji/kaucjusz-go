@@ -59,7 +59,7 @@ class _ReceiptPageState extends State<ReceiptPage> {
           ); // jeszcze czekamy
         }
         if (snapshot.hasError) {
-          return Text('Błąd: ${snapshot.error}');
+          return Center(child: Text('Błąd: ${snapshot.error}'));
         }
         final controller = snapshot.data!;
         final size = controller.value.previewSize!;
