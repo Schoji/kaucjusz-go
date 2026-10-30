@@ -3,7 +3,7 @@ spring:
     name: kaucjuszGo
     
   datasource:
-    url: jdbc:postgresql://localhost:5432/kaucjusz_db
+    url: jdbc:postgresql://localhost:5433/kaucjusz_db
     username: admin
     password: admin
     driver-class-name: org.postgresql.Driver
@@ -15,7 +15,6 @@ spring:
     properties:
       hibernate:
         format_sql: true
-        dialect: org.hibernate.dialect.PostgreSQLDialect
 
   flyway:
     enabled: true

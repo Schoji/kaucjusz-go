@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-KaucjuszGoApplication<kaucjuszGo>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.kaucjuszGo.KaucjuszGoApplication",
+            "projectName": "kaucjuszGo",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
