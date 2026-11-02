@@ -20,6 +20,6 @@ public class MachineDetailsResponseDto {
     private OpeningHours openingHours;
     private BigDecimal averageRating;
     private Integer reviewsCount;
-    private String status;
+    private MachineStatus status;
     private Page<ReviewDto> reviews;
 }

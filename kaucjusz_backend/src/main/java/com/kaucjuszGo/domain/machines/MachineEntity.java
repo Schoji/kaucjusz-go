@@ -4,12 +4,24 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;
 
-import com.kaucjuszGo.domain.user.UserEntity;
-import jakarta.persistence.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 import org.locationtech.jts.geom.Point;
 
+import com.kaucjuszGo.domain.user.UserEntity;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -48,7 +60,8 @@ public class MachineEntity {
     private Integer reviewsCount = 0;
 
     @Column(name = "status", nullable = false, length = 30)
-    private String status = "ACTIVE";
+    @Enumerated(EnumType.STRING)
+    private MachineStatus status = MachineStatus.ACTIVE;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reported_by_user_id")
@@ -69,7 +82,7 @@ public class MachineEntity {
             reviewsCount = 0;
         }
         if (status == null) {
-            status = "ACTIVE";
+            status = MachineStatus.ACTIVE;
         }
     }
 
