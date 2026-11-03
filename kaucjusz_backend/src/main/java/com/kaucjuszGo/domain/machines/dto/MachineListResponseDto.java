@@ -1,4 +1,4 @@
-package com.kaucjuszGo.domain.machines;
+package com.kaucjuszGo.domain.machines.dto;
 
 import java.util.UUID;
 
@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter 
-@Setter 
+@Setter
 public class MachineListResponseDto {
     private UUID id;
     private Double longitude;

@@ -9,6 +9,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.kaucjuszGo.domain.machines.dto.MachineDetailsResponseDto;
+import com.kaucjuszGo.domain.machines.dto.MachineListResponseDto;
+import com.kaucjuszGo.domain.machines.dto.MachineWithDistanceProjection;
 import com.kaucjuszGo.domain.machines.reviews.MachineReviewEntity;
 import com.kaucjuszGo.domain.machines.reviews.MachineReviewRepository;
 import com.kaucjuszGo.domain.machines.reviews.ReviewDto;
@@ -58,7 +61,8 @@ public class MachineService {
     public List<MachineListResponseDto> getMachines(Double longitude, Double latitude, Double radius, String query, Boolean isOpen, Boolean isTopRated, Boolean isNearby) {
 
         Point position = LocationUtils.createPoint(latitude, longitude);
-        List<MachineWithDistanceProjection> machineProjections = machineRepository.findMachinesWithFilters(position, radius, query, isOpen, isTopRated, isNearby);
+        String queryPattern = (query != null && !query.isBlank()) ? "%" + query.toLowerCase().trim() + "%" : null;
+        List<MachineWithDistanceProjection> machineProjections = machineRepository.findMachinesWithFilters(position, radius, queryPattern, isOpen, isTopRated, isNearby);
 
         return machineProjections.stream().map(machine -> {
             MachineListResponseDto dto = new MachineListResponseDto();

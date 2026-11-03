@@ -1,0 +1,5 @@
+ALTER TABLE vending_machines
+   ADD COLUMN external_id VARCHAR(100) UNIQUE,
+   ADD COLUMN brand VARCHAR(100),
+   ADD COLUMN city VARCHAR(100),
+   ADD COLUMN postal_code VARCHAR(10);

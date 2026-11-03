@@ -37,11 +37,23 @@ public class MachineEntity {
     @Column(name = "id", nullable = false, unique = true)
     private UUID id;
 
+    @Column(name = "external_id", unique = true, length = 100)
+    private String externalId;
+
     @Column(name = "name", nullable = false, length = 150)
     private String name;
 
+    @Column(name = "brand", nullable = false, length = 100)
+    private String brand;
+
+    @Column (name = "city", nullable = false, length = 100)
+    private String city;
+
     @Column(name = "address", nullable = false, length = 255)
     private String address;
+
+    @Column(name = "postal_code", length = 6)
+    private String postalCode;
 
     @Column(name = "location", nullable = false, columnDefinition = "geography(Point, 4326)")
     private Point geolocation;

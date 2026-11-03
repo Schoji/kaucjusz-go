@@ -1,10 +1,12 @@
-package com.kaucjuszGo.domain.machines;
+package com.kaucjuszGo.domain.machines.dto;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 
+import com.kaucjuszGo.domain.machines.MachineStatus;
+import com.kaucjuszGo.domain.machines.OpeningHours;
 import com.kaucjuszGo.domain.machines.reviews.ReviewDto;
 
 import lombok.Getter;
