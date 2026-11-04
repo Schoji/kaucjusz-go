@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:kaucjusz_go/receipt/widgets/receipt_bottom_sheet.dart';
 
 Future<CameraController> initCamera() async {
   final availableCams = await availableCameras();
@@ -63,16 +65,52 @@ class _ReceiptPageState extends State<ReceiptPage> {
         }
         final controller = snapshot.data!;
         final size = controller.value.previewSize!;
-        return SizedBox.expand(
-          child: FittedBox(
-            fit: BoxFit.cover,
-            child: SizedBox(
-              height: size.width,
-              width: size.height,
-              child: CameraPreview(controller),
-            ),
+        return AnnotatedRegion<SystemUiOverlayStyle>(
+          value: SystemUiOverlayStyle.light,
+          child: Stack(
+            children: [
+              SizedBox.expand(
+                child: FittedBox(
+                  fit: BoxFit.cover,
+                  child: SizedBox(
+                    height: size.width,
+                    width: size.height,
+                    child: CameraPreview(controller),
+                  ),
+                ),
+              ),
+              Center(
+                child: SvgPicture.asset(
+                  "assets/scan.svg",
+                  semanticsLabel: 'My SVG Image',
+                  colorFilter: ColorFilter.mode(Colors.black, BlendMode.srcIn),
+                  height: 200,
+                  width: 200,
+                ),
+              ),
+              Align(
+                alignment: AlignmentGeometry.bottomCenter,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 24),
+                  child: SizedBox(
+                    width: 78,
+                    height: 78,
+                    child: FloatingActionButton.large(
+                      elevation: 1,
+                      shape: const CircleBorder(),
+                      onPressed: () => showModalBottomSheet(
+                        showDragHandle: true,
+                        context: context,
+                        builder: (context) => ReceiptBottomSheet(),
+                      ),
+                      child: Icon(Icons.photo_camera_outlined, size: 36),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-        ); // gotowe
+        );
       },
     );
   }
