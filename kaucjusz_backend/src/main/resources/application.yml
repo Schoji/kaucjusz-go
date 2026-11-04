@@ -1,13 +1,13 @@
 spring:
   application:
     name: kaucjuszGo
-    
+
   datasource:
     url: jdbc:postgresql://localhost:5433/kaucjusz_db
     username: admin
     password: admin
     driver-class-name: org.postgresql.Driver
-  
+
   jpa:
     hibernate:
       ddl-auto: validate
@@ -19,3 +19,6 @@ spring:
   flyway:
     enabled: true
     baseline-on-migrate: true
+
+firebase:
+  config-path: classpath:firebase-service-account.json
