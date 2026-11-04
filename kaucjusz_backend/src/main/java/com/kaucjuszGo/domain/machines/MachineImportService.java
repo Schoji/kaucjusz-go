@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
@@ -24,14 +26,16 @@ public class MachineImportService {
     }
 
     @Transactional
+    @EventListener(ApplicationReadyEvent.class)
     public void importMachinesFromExternalSource() {
         RestClient restClient = RestClient.create();
 
         List<ExternalMachineDto> externalMachines = restClient.get()
                 .uri("https://mapakaucji.pl/data/kaucjomaty_polska.json")
                 .retrieve()
-                .body(new ParameterizedTypeReference<List<ExternalMachineDto>>() {});
-        
+                .body(new ParameterizedTypeReference<List<ExternalMachineDto>>() {
+                });
+
         Set<String> existingExternalIds = machineRepository.findAllExternalIds();
 
         List<MachineEntity> machinesToSave = new ArrayList<>();
@@ -42,9 +46,13 @@ public class MachineImportService {
                 continue;
             }
 
-            // Maybe if there is a record update data that is different, but for now just skip if the machine already exists
-            String externalMachineId = DigestUtils.md5DigestAsHex((externalMachine.getBrand() + "_" + externalMachine.getCity() + "_" + externalMachine.getAddress() + "_" + externalMachine.getLatitude().toString() + "_" + externalMachine.getLongitude().toString()).getBytes(StandardCharsets.UTF_8));
-            
+            // Maybe if there is a record update data that is different, but for now just
+            // skip if the machine already exists
+            String externalMachineId = DigestUtils
+                    .md5DigestAsHex((externalMachine.getBrand() + "_" + externalMachine.getCity() + "_"
+                            + externalMachine.getAddress() + "_" + externalMachine.getLatitude().toString() + "_"
+                            + externalMachine.getLongitude().toString()).getBytes(StandardCharsets.UTF_8));
+
             if (existingExternalIds.contains(externalMachineId)) {
                 continue; // Skip if the machine already exists in the database
             }
@@ -52,12 +60,13 @@ public class MachineImportService {
             MachineEntity machineEntity = new MachineEntity();
             machineEntity.setExternalId(externalMachineId);
             machineEntity.setName(externalMachine.getBrand());
-            machineEntity.setGeolocation(LocationUtils.createPoint(externalMachine.getLatitude(), externalMachine.getLongitude()));
+            machineEntity.setGeolocation(
+                    LocationUtils.createPoint(externalMachine.getLatitude(), externalMachine.getLongitude()));
             machineEntity.setBrand(externalMachine.getBrand());
             machineEntity.setCity(externalMachine.getCity());
             machineEntity.setAddress(externalMachine.getAddress());
             machineEntity.setPostalCode(externalMachine.getPostalCode());
-            
+
             machinesToSave.add(machineEntity);
             existingExternalIds.add(externalMachineId);
         }

@@ -29,7 +29,7 @@ public class MachineService {
 
     public MachineDetailsResponseDto getMachine(UUID id, Pageable pageable) {
         MachineEntity machine = machineRepository.findById(id).orElse(null);
-        
+
         if (machine == null) {
             return null;
         }
@@ -54,15 +54,21 @@ public class MachineService {
             reviewDto.setCreatedAt(review.getCreatedAt());
             return reviewDto;
         }));
-        
+
         return response;
     }
 
-    public List<MachineListResponseDto> getMachines(Double longitude, Double latitude, Double radius, String query, Boolean isOpen, Boolean isTopRated, Boolean isNearby) {
+    public List<MachineListResponseDto> getMachines(Double longitude, Double latitude, Double radiusInMeters,
+            String query,
+            Boolean isOpen, Boolean isTopRated, Boolean isNearby) {
 
         Point position = LocationUtils.createPoint(latitude, longitude);
         String queryPattern = (query != null && !query.isBlank()) ? "%" + query.toLowerCase().trim() + "%" : null;
-        List<MachineWithDistanceProjection> machineProjections = machineRepository.findMachinesWithFilters(position, radius, queryPattern, isOpen, isTopRated, isNearby);
+
+        double radius = radiusInMeters / 111320.0; // Convert radius from meters to degrees (approximate)
+
+        List<MachineWithDistanceProjection> machineProjections = machineRepository.findMachinesWithFilters(position,
+                radius, queryPattern, isOpen, isTopRated, isNearby);
 
         return machineProjections.stream().map(machine -> {
             MachineListResponseDto dto = new MachineListResponseDto();
@@ -75,7 +81,7 @@ public class MachineService {
             dto.setAverageRating(machine.getAverageRating());
             dto.setDistance(machine.getDistance());
             return dto;
-            
+
         }).collect(Collectors.toList());
     }
 }

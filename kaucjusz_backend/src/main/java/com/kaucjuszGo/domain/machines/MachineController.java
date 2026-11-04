@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.kaucjuszGo.domain.machines.dto.MachineDetailsResponseDto;
 import com.kaucjuszGo.domain.machines.dto.MachineListResponseDto;
 
-
-
 @RestController
 @RequestMapping("/api/vending-machines")
 public class MachineController {
@@ -32,21 +30,27 @@ public class MachineController {
 
     // Get machine details by ID - KGO-40
     @GetMapping("/{id}")
-    public ResponseEntity<MachineDetailsResponseDto> getMachine(@PathVariable UUID id, @PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+    public ResponseEntity<MachineDetailsResponseDto> getMachine(@PathVariable UUID id,
+            @PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         MachineDetailsResponseDto machineDetails = machineService.getMachine(id, pageable);
         if (machineDetails == null) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(machineDetails);
     }
-    
+
     // Get all machines - KGO-39
     @GetMapping("/search")
-    public ResponseEntity<List<MachineListResponseDto>> getMachines(@RequestParam Double longitude, @RequestParam Double latitude, @RequestParam Double radius, @RequestParam(required = false) String query, @RequestParam(required = false) Boolean isOpen, @RequestParam(required = false) Boolean isTopRated, @RequestParam(required = false) Boolean isNearby) {
-        List<MachineListResponseDto> machines = machineService.getMachines(longitude, latitude, radius, query, isOpen, isTopRated, isNearby);
+    public ResponseEntity<List<MachineListResponseDto>> getMachines(@RequestParam Double longitude,
+            @RequestParam Double latitude, @RequestParam Double radius, @RequestParam(required = false) String query,
+            @RequestParam(required = false) Boolean isOpen, @RequestParam(required = false) Boolean isTopRated,
+            @RequestParam(required = false) Boolean isNearby) {
+        List<MachineListResponseDto> machines = machineService.getMachines(longitude, latitude, radius, query, isOpen,
+                isTopRated, isNearby);
         return ResponseEntity.ok(machines);
     }
-    
+
+    // Import machines from external source - KGO-38
     @PostMapping("/import")
     public ResponseEntity<String> importMachines() {
         machineImportService.importMachinesFromExternalSource();
