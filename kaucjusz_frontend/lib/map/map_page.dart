@@ -9,32 +9,50 @@ class MapPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: FlutterMap(
-        options: MapOptions(
-          initialCenter: LatLng(
-            51.509364,
-            -0.128928,
-          ), // Center the map over London, UK
-          initialZoom: 9.2,
-        ),
+      child: Stack(
         children: [
-          TileLayer(
-            // Bring your own tiles
-            urlTemplate:
-                'https://tile.openstreetmap.org/{z}/{x}/{y}.png', // For demonstration only
-            userAgentPackageName: "com.kaucjuszgo.siema",
-          ),
-          RichAttributionWidget(
-            // Include a stylish prebuilt attribution widget that meets all requirments
-            attributions: [
-              TextSourceAttribution(
-                'OpenStreetMap contributors',
-                onTap: () => launchUrl(
-                  Uri.parse('https://openstreetmap.org/copyright'),
-                ), // (external)
+          FlutterMap(
+            options: MapOptions(
+              initialCenter: LatLng(
+                51.509364,
+                -0.128928,
+              ), // Center the map over London, UK
+              initialZoom: 9.2,
+            ),
+            children: [
+              TileLayer(
+                // Bring your own tiles
+                urlTemplate:
+                    'https://tile.openstreetmap.org/{z}/{x}/{y}.png', // For demonstration only
+                userAgentPackageName: "com.kaucjuszgo.siema",
               ),
-              // Also add images...
+              RichAttributionWidget(
+                // Include a stylish prebuilt attribution widget that meets all requirments
+                attributions: [
+                  TextSourceAttribution(
+                    'OpenStreetMap contributors',
+                    onTap: () => launchUrl(
+                      Uri.parse('https://openstreetmap.org/copyright'),
+                    ), // (external)
+                  ),
+                  // Also add images...
+                ],
+              ),
             ],
+          ),
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: SearchBar(
+                trailing: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    child: Icon(Icons.search),
+                  ),
+                ],
+                hintText: "Szukaj kaucjomatu",
+              ),
+            ),
           ),
         ],
       ),
