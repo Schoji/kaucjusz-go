@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "826527314487",
+    "project_id": "kaucjusz-go",
+    "storage_bucket": "kaucjusz-go.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:826527314487:android:d47e106657379b3951c5b2",
+        "android_client_info": {
+          "package_name": "com.example.kaucjusz_frontend"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "826527314487-3g94ert0nm53fjqbojouofe6719ak162.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.kaucjusz_frontend",
+            "certificate_hash": "3f67baa4ac7919388f5ac015180229511b84d2cf"
+          }
+        },
+        {
+          "client_id": "826527314487-8uo7kldm93nnuab7glpii09h952f1sao.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyABvTqLRDv-W88ZFuEnoSvjlY0yNxy8GxA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "826527314487-8uo7kldm93nnuab7glpii09h952f1sao.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "826527314487-b640b4eepg1nmg6s9do8pff4l8vr5or6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "kaucjuszteam.kaucjuszFrontend"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
