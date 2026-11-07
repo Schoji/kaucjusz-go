@@ -4,6 +4,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.kaucjuszGo.domain.pet.PetEntity;
+
 @Service
 public class UserSyncService {
     private final UserRepository userRepository;
@@ -15,7 +17,7 @@ public class UserSyncService {
     @Transactional
     public UserSyncResponseDto syncUser(String firebaseUserId, String nickname, String email, String region) {
         UserEntity userEntity = userRepository.findUserByFirebaseUid(firebaseUserId).orElse(null);
-
+        
         UserSyncResponseDto userDto = new UserSyncResponseDto();
 
         if (userEntity == null) {
@@ -23,11 +25,16 @@ public class UserSyncService {
                 throw new org.springframework.web.server.ResponseStatusException(
                         HttpStatus.CONFLICT, "Nickname is already taken");
             }
+
             userEntity = new UserEntity();
             userEntity.setFirebaseId(firebaseUserId);
             userEntity.setNickname(nickname);
             userEntity.setEmail(email);
             userEntity.setRegion(region);
+
+            PetEntity petEntity = new PetEntity();
+            petEntity.setUser(userEntity);
+            userEntity.setPet(petEntity);
 
             userRepository.save(userEntity);
 

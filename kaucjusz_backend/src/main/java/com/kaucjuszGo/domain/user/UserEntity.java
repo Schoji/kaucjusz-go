@@ -4,11 +4,15 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.util.UUID;
 
+import com.kaucjuszGo.domain.pet.PetEntity;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -55,6 +59,9 @@ public class UserEntity {
 
     @Column(name = "deleted_at")
     private Instant deletedAt;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private PetEntity pet;
 
     @PrePersist
     public void prePersist() {
