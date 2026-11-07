@@ -1,0 +1,38 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "kaucjusz-go",
+          "appId": "1:826527314487:android:d47e106657379b3951c5b2",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "ios": {
+        "default": {
+          "projectId": "kaucjusz-go",
+          "appId": "1:826527314487:ios:7001b52fa1fa4c3451c5b2",
+          "uploadDebugSymbols": false,
+          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "kaucjusz-go",
+          "configurations": {
+            "android": "1:826527314487:android:d47e106657379b3951c5b2",
+            "ios": "1:826527314487:ios:7001b52fa1fa4c3451c5b2"
+          }
+        }
+      }
+    }
+  },
+  "auth": {
+    "providers": {
+      "googleSignIn": {
+        "oAuthBrandDisplayName": "kaucjusz-go",
+        "supportEmail": "support@kaucjusz-go.firebaseapp.com"
+      }
+    }
+  }
+}

@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-81 98 565 371" width="565" height="371">
+  <g fill="none" stroke="#3d5a45" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+    <!-- sweat drop -->
+    <path d="M120 176 C110 193 108 210 120 210 C132 210 130 193 120 176 Z" fill="#cbd5ce" stroke-width="5"/>
+
+    <!-- left arm -->
+    <path d="M130 335 C110 350 96 372 92 398"/>
+    <ellipse cx="88" cy="410" rx="9" ry="11" fill="#3d5a45" stroke="none"/>
+
+    <!-- body -->
+    <path d="M174 166 L174 182 C174 202 133 214 131 255 L129 440 Q129 456 145 456 L257 456 Q273 456 273 440 L271 255 C269 214 246 202 246 182 L246 166 Z" fill="#f4f6f3"/>
+    <!-- side shading -->
+    <path d="M252 250 C262 262 263 280 263 300 L263 440 Q263 446 256 446 L252 446 Z" fill="#e1e6e2" stroke="none"/>
+    <path d="M150 250 C141 262 139 280 139 300 L139 440 Q139 446 146 446 L148 446 Z" fill="#e8ece9" stroke="none"/>
+
+    <!-- cap -->
+    <rect x="168" y="126" width="84" height="40" rx="6" fill="#cbd5ce"/>
+    <path d="M176 176 L244 176" stroke-width="5"/>
+
+    <!-- right arm, hand on the back of the head -->
+    <path d="M272 342 C302 322 306 272 288 248"/>
+    <ellipse cx="283" cy="244" rx="11" ry="12" fill="#3d5a45" stroke="none"/>
+
+    <!-- face -->
+    <path d="M155 297 Q166 288 180 285 M220 285 Q234 288 245 297" stroke-width="5"/>
+    <circle cx="170" cy="313" r="5.5" fill="#3d5a45" stroke="none"/>
+    <circle cx="232" cy="313" r="5.5" fill="#3d5a45" stroke="none"/>
+    <path d="M186 341 Q193 331 202 334 Q209 337 215 342" stroke-width="5"/>
+
+    <!-- speech bubble -->
+    <ellipse cx="390" cy="172" rx="82" ry="62" fill="#ffffff" stroke-width="7"/>
+    <polygon points="338,214 320,248 366,230" fill="#ffffff" stroke="none"/>
+    <polyline points="339,216 320,248 364,231" stroke-width="7"/>
+
+    <!-- refresh icon -->
+    <path d="M406 164 A22 22 0 1 1 385 150" stroke-width="7"/>
+    <polyline points="378,141 388,150 378,159" stroke-width="7"/>
+  </g>
+</svg>

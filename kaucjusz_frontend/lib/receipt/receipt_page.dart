@@ -101,7 +101,9 @@ class _ReceiptPageState extends State<ReceiptPage> {
                       onPressed: () => showModalBottomSheet(
                         showDragHandle: true,
                         context: context,
-                        builder: (context) => ReceiptBottomSheet(),
+                        builder: (context) => ReceiptBottomSheet(
+                          status: ReceiptSheetStatus.failure,
+                        ),
                       ),
                       child: Icon(Icons.photo_camera_outlined, size: 36),
                     ),
