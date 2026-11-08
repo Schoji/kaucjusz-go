@@ -22,3 +22,5 @@ spring:
 
 firebase:
   config-path: classpath:firebase-service-account.json
+
+  dev-mode: true
