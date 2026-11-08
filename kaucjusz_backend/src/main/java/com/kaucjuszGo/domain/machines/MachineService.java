@@ -7,7 +7,9 @@ import java.util.stream.Collectors;
 import org.locationtech.jts.geom.Point;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.kaucjuszGo.domain.machines.dto.MachineDetailsResponseDto;
 import com.kaucjuszGo.domain.machines.dto.MachineListResponseDto;
@@ -27,7 +29,11 @@ public class MachineService {
         this.machineReviewRepository = machineReviewRepository;
     }
 
-    public MachineDetailsResponseDto getMachine(UUID id, Pageable pageable) {
+    public MachineEntity getMachineById(UUID machineId){
+        return machineRepository.findById(machineId)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Machine not found"));    }
+
+    public MachineDetailsResponseDto getMachineDetails(UUID id, Pageable pageable) {
         MachineEntity machine = machineRepository.findById(id).orElse(null);
 
         if (machine == null) {
