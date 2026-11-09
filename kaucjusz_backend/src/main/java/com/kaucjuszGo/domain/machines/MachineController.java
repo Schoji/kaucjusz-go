@@ -23,7 +23,6 @@ import com.kaucjuszGo.domain.machines.reviews.MachineReviewService;
 
 import jakarta.validation.Valid;
 
-
 @RestController
 @RequestMapping("/api/vending-machines")
 public class MachineController {
@@ -31,7 +30,8 @@ public class MachineController {
     private final MachineImportService machineImportService;
     private final MachineReviewService machineReviewService;
 
-    public MachineController(MachineService machineService, MachineImportService machineImportService, MachineReviewService machineReviewService) {
+    public MachineController(MachineService machineService, MachineImportService machineImportService,
+            MachineReviewService machineReviewService) {
         this.machineService = machineService;
         this.machineImportService = machineImportService;
         this.machineReviewService = machineReviewService;
@@ -66,10 +66,11 @@ public class MachineController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/{machineId}/reviews")
-    public ResponseEntity<Void> addReview(@PathVariable UUID machineId, @RequestBody @Valid ReviewRequestDto request){
+    @PostMapping("/{id}/reviews")
+    public ResponseEntity<Void> addReview(@PathVariable("id") UUID machineId,
+            @RequestBody @Valid ReviewRequestDto request) {
         machineReviewService.addOrUpdateReview(machineId, request.getRating(), request.getComment());
 
-        return ResponseEntity.status(HttpStatus.CREATED).build();    
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }
