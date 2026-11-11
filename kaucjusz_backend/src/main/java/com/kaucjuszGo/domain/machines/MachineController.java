@@ -50,12 +50,16 @@ public class MachineController {
 
     // Get all machines - KGO-39
     @GetMapping("/search")
-    public ResponseEntity<List<MachineListResponseDto>> getMachines(@RequestParam Double longitude,
-            @RequestParam Double latitude, @RequestParam Double radius, @RequestParam(required = false) String query,
-            @RequestParam(required = false) Boolean isOpen, @RequestParam(required = false) Boolean isTopRated,
-            @RequestParam(required = false) Boolean isNearby) {
-        List<MachineListResponseDto> machines = machineService.getMachines(longitude, latitude, radius, query, isOpen,
-                isTopRated, isNearby);
+    public ResponseEntity<List<MachineListResponseDto>> getMachines(
+            @RequestParam Double latitude, 
+            @RequestParam Double longitude,
+            @RequestParam(required = false) Double radius, 
+            @RequestParam(required = false) String query,
+            @RequestParam(required = false) Boolean isOpen, 
+            @RequestParam(required = false) Boolean isTopRated
+        ) {
+        List<MachineListResponseDto> machines = machineService.getMachines(latitude, longitude, radius, query, isOpen,
+                isTopRated);
         return ResponseEntity.ok(machines);
     }
 

@@ -9,8 +9,8 @@ import lombok.Setter;
 @Setter
 public class MachineListResponseDto {
     private UUID id;
-    private Double longitude;
     private Double latitude;
+    private Double longitude;
     private String name;
     private String address;
     private Double distance;

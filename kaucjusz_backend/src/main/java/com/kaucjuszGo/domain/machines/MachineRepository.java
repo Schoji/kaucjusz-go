@@ -19,8 +19,9 @@ public interface MachineRepository extends JpaRepository<MachineEntity, UUID> {
            "WHERE (:queryPattern IS NULL OR LOWER(m.name) LIKE :queryPattern OR LOWER(m.address) LIKE :queryPattern) " +
            "AND (:isOpen IS NULL OR (m.status = 'ACTIVE' AND :isOpen = TRUE) OR (m.status != 'ACTIVE' AND :isOpen = FALSE)) " +
            "AND (:isTopRated IS NULL OR (m.averageRating >= 4.5 AND :isTopRated = TRUE) OR (m.averageRating < 4.5 AND :isTopRated = FALSE)) " +
-           "AND (:isNearby IS NULL OR (ST_Distance(m.geolocation, :position) <= :radius AND :isNearby = TRUE) OR (ST_Distance(m.geolocation, :position) > :radius AND :isNearby = FALSE))")
-    public List<MachineWithDistanceProjection> findMachinesWithFilters(@Param("position") Point position, @Param("radius") Double radius, @Param("queryPattern") String queryPattern, @Param("isOpen") Boolean isOpen, @Param("isTopRated") Boolean isTopRated, @Param("isNearby") Boolean isNearby);
+           "AND (:radius IS NULL OR ST_Distance(m.geolocation, :position) <= :radius) " +
+           "ORDER BY ST_Distance(m.geolocation, :position) ASC")
+    public List<MachineWithDistanceProjection> findMachinesWithFilters(@Param("position") Point position, @Param("radius") Double radius, @Param("queryPattern") String queryPattern, @Param("isOpen") Boolean isOpen, @Param("isTopRated") Boolean isTopRated);
 
     @Query("SELECT m.externalId FROM MachineEntity m WHERE m.externalId IS NOT NULL")
     public Set<String> findAllExternalIds();

@@ -64,17 +64,15 @@ public class MachineService {
         return response;
     }
 
-    public List<MachineListResponseDto> getMachines(Double longitude, Double latitude, Double radiusInMeters,
+    public List<MachineListResponseDto> getMachines(Double latitude, Double longitude, Double radius,
             String query,
-            Boolean isOpen, Boolean isTopRated, Boolean isNearby) {
+            Boolean isOpen, Boolean isTopRated) {
 
         Point position = LocationUtils.createPoint(latitude, longitude);
         String queryPattern = (query != null && !query.isBlank()) ? "%" + query.toLowerCase().trim() + "%" : null;
 
-        double radius = radiusInMeters / 111320.0; // Convert radius from meters to degrees (approximate)
-
         List<MachineWithDistanceProjection> machineProjections = machineRepository.findMachinesWithFilters(position,
-                radius, queryPattern, isOpen, isTopRated, isNearby);
+                radius, queryPattern, isOpen, isTopRated);
 
         return machineProjections.stream().map(machine -> {
             MachineListResponseDto dto = new MachineListResponseDto();
@@ -82,8 +80,8 @@ public class MachineService {
             dto.setName(machine.getName());
             dto.setAddress(machine.getAddress());
             dto.setPhotoUrl(machine.getPhotoUrl());
-            dto.setLongitude(machine.getLongitude());
             dto.setLatitude(machine.getLatitude());
+            dto.setLongitude(machine.getLongitude());
             dto.setAverageRating(machine.getAverageRating());
             dto.setDistance(machine.getDistance());
             return dto;
