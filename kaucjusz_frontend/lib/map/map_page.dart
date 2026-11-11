@@ -3,6 +3,8 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kaucjusz_go/login/login_page.dart';
 import 'package:kaucjusz_go/map/widgets/draggable_sheet.dart';
+import 'package:kaucjusz_go/models/vending_machine.dart';
+import 'package:kaucjusz_go/models/vending_machine_details.dart';
 import 'package:kaucjusz_go/service/database_service.dart';
 
 import 'package:latlong2/latlong.dart';
@@ -34,6 +36,11 @@ class _MapPageState extends State<MapPage> {
       DraggableScrollableController();
   ScrollController scrollController = ScrollController();
 
+  VendingMachine? selectedMachine;
+
+  late final Future<List<VendingMachine>> _vendingMachineFuture;
+  Future<VendingMachineDetails>? _detailsFuture;
+
   void onSheetChanged() {
     if (!sheetController.isAttached) {
       return;
@@ -50,6 +57,10 @@ class _MapPageState extends State<MapPage> {
   @override
   void initState() {
     super.initState();
+    _vendingMachineFuture = db.getVendingMachines(
+      LatLng(53.4285, 14.5528),
+      10000,
+    );
     sheetController.addListener(onSheetChanged);
   }
 
@@ -78,19 +89,30 @@ class _MapPageState extends State<MapPage> {
               userAgentPackageName: "com.kaucjuszgo.siema",
             ),
             FutureBuilder(
-              future: db.getVendingMachines(53.4285, 14.5528, 100.0),
+              future: _vendingMachineFuture,
               builder: (context, asyncSnapshot) {
-                print(asyncSnapshot.data);
-                return MarkerLayer(
-                  markers: mockMarkers
-                      .map(
-                        (marker) => Marker(
+                if (asyncSnapshot.hasError) {
+                  print(asyncSnapshot.error);
+                }
+
+                if (asyncSnapshot.hasData) {
+                  final vendingMachines = asyncSnapshot.data ?? [];
+                  return MarkerLayer(
+                    markers: [
+                      ...vendingMachines.map(
+                        (machine) => Marker(
                           height: 64,
                           width: 64,
                           alignment: Alignment.topCenter,
-                          point: marker,
+                          point: LatLng(machine.latitude, machine.longitude),
                           child: GestureDetector(
                             onTap: () {
+                              setState(() {
+                                selectedMachine = machine;
+                                _detailsFuture = db.getVendingMachine(
+                                  machine.id,
+                                );
+                              });
                               sheetController.animateTo(
                                 peekSize,
                                 duration: Duration(milliseconds: 100),
@@ -102,9 +124,11 @@ class _MapPageState extends State<MapPage> {
                             ),
                           ),
                         ),
-                      )
-                      .toList(),
-                );
+                      ),
+                    ],
+                  );
+                }
+                return Container();
               },
             ),
             RichAttributionWidget(
@@ -146,7 +170,11 @@ class _MapPageState extends State<MapPage> {
             child: Icon(Icons.login),
           ),
         ),
-        DraggableSheet(sheetController: sheetController),
+        DraggableSheet(
+          vendingMachine: selectedMachine,
+          detailsFuture: _detailsFuture,
+          sheetController: sheetController,
+        ),
       ],
     );
   }
