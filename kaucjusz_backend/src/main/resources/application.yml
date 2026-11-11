@@ -23,4 +23,10 @@ spring:
 firebase:
   config-path: classpath:firebase-service-account.json
 
-  dev-mode: true
+  dev-mode: false
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /docs
