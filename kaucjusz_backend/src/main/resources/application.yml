@@ -23,7 +23,7 @@ spring:
 firebase:
   config-path: classpath:firebase-service-account.json
 
-  dev-mode: false
+  dev-mode: true
 
 springdoc:
   api-docs:
