@@ -3,6 +3,7 @@ package com.kaucjuszGo.domain.machines;
 import java.util.List;
 import java.util.UUID;
 
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -39,8 +40,8 @@ public class MachineController {
 
     // Get machine details by ID - KGO-40
     @GetMapping("/{id}")
-    public ResponseEntity<MachineDetailsResponseDto> getMachine(@PathVariable UUID id,
-            @PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+    public ResponseEntity<MachineDetailsResponseDto> getMachine(@PathVariable("id") UUID id,
+            @ParameterObject @PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         MachineDetailsResponseDto machineDetails = machineService.getMachineDetails(id, pageable);
         if (machineDetails == null) {
             return ResponseEntity.notFound().build();
@@ -49,7 +50,7 @@ public class MachineController {
     }
 
     // Get all machines - KGO-39
-    @GetMapping("/search")
+    @GetMapping("/")
     public ResponseEntity<List<MachineListResponseDto>> getMachines(
             @RequestParam Double latitude, 
             @RequestParam Double longitude,

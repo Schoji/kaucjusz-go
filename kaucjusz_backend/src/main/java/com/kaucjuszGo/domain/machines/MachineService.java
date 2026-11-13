@@ -36,11 +36,8 @@ public class MachineService {
     }
 
     public MachineDetailsResponseDto getMachineDetails(UUID id, Pageable pageable) {
-        MachineEntity machine = machineRepository.findById(id).orElse(null);
-
-        if (machine == null) {
-            return null;
-        }
+        MachineEntity machine = machineRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Machine not found"));
 
         Page<MachineReviewEntity> reviews = machineReviewRepository.findByMachine_Id(id, pageable);
 
