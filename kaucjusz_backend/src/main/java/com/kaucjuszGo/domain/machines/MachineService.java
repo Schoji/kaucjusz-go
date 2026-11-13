@@ -30,9 +30,10 @@ public class MachineService {
         this.machineReviewRepository = machineReviewRepository;
     }
 
-    public MachineEntity getMachineById(UUID machineId){
+    public MachineEntity getMachineById(UUID machineId) {
         return machineRepository.findById(machineId)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Machine not found"));    }
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Machine not found"));
+    }
 
     public MachineDetailsResponseDto getMachineDetails(UUID id, Pageable pageable) {
         MachineEntity machine = machineRepository.findById(id).orElse(null);
@@ -87,6 +88,8 @@ public class MachineService {
             dto.setLongitude(machine.getLongitude());
             dto.setAverageRating(machine.getAverageRating());
             dto.setDistance(machine.getDistance());
+            dto.setReviewsCount(machine.getReviewsCount());
+            dto.setStatus(machine.getStatus());
             return dto;
 
         }).collect(Collectors.toList());
