@@ -19,8 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kaucjuszGo.domain.machines.dto.MachineDetailsResponseDto;
 import com.kaucjuszGo.domain.machines.dto.MachineListResponseDto;
+import com.kaucjuszGo.domain.machines.dto.PageResponseDto;
 import com.kaucjuszGo.domain.machines.dto.ReviewRequestDto;
 import com.kaucjuszGo.domain.machines.reviews.MachineReviewService;
+import com.kaucjuszGo.domain.machines.reviews.ReviewDto;
 
 import jakarta.validation.Valid;
 
@@ -40,17 +42,12 @@ public class MachineController {
 
     // Get machine details by ID - KGO-40
     @GetMapping("/{id}")
-    public ResponseEntity<MachineDetailsResponseDto> getMachine(@PathVariable("id") UUID id,
-            @ParameterObject @PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
-        MachineDetailsResponseDto machineDetails = machineService.getMachineDetails(id, pageable);
-        if (machineDetails == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(machineDetails);
+    public ResponseEntity<MachineDetailsResponseDto> getMachine(@PathVariable("id") UUID id) {
+        return ResponseEntity.ok(machineService.getMachineDetails(id));
     }
 
     // Get all machines - KGO-39
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<List<MachineListResponseDto>> getMachines(
             @RequestParam Double latitude, 
             @RequestParam Double longitude,
@@ -63,6 +60,13 @@ public class MachineController {
                 isTopRated);
         return ResponseEntity.ok(machines);
     }
+
+    @GetMapping("/{id}/reviews")
+    public ResponseEntity<PageResponseDto<ReviewDto>> getMachineReviews(
+        @PathVariable("id") UUID id,
+        @ParameterObject @PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+    return ResponseEntity.ok(machineReviewService.getReviewsForMachine(id, pageable));
+}  
 
     // Import machines from external source - KGO-38
     @PostMapping("/import")

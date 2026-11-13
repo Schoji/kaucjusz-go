@@ -5,11 +5,14 @@ import java.math.RoundingMode;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.kaucjuszGo.domain.machines.MachineEntity;
 import com.kaucjuszGo.domain.machines.MachineRepository;
 import com.kaucjuszGo.domain.machines.MachineService;
+import com.kaucjuszGo.domain.machines.dto.PageResponseDto;
 import com.kaucjuszGo.domain.user.UserEntity;
 import com.kaucjuszGo.domain.user.UserService;
 
@@ -54,5 +57,25 @@ public class MachineReviewService {
         }
 
         machineRepository.save(machine);
+    }
+
+    public PageResponseDto<ReviewDto> getReviewsForMachine(UUID machineId, Pageable pageable){
+        // Checks if machine exists
+        machineService.getMachineById(machineId);
+
+        Page<MachineReviewEntity> reviews = (machineReviewRepository.findByMachine_Id(machineId, pageable));
+
+
+        Page<ReviewDto> reviewDtos = (reviews.map(review -> {
+            ReviewDto reviewDto = new ReviewDto();
+            reviewDto.setId(review.getId());
+            reviewDto.setRating(review.getRating());
+            reviewDto.setComment(review.getComment());
+            reviewDto.setUser(review.getUser() != null ? review.getUser().getNickname() : null);
+            reviewDto.setCreatedAt(review.getCreatedAt());
+            return reviewDto;
+        }));
+
+        return PageResponseDto.from(reviewDtos);
     }
 }

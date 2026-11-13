@@ -5,8 +5,6 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.locationtech.jts.geom.Point;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -14,20 +12,14 @@ import org.springframework.web.server.ResponseStatusException;
 import com.kaucjuszGo.domain.machines.dto.MachineDetailsResponseDto;
 import com.kaucjuszGo.domain.machines.dto.MachineListResponseDto;
 import com.kaucjuszGo.domain.machines.dto.MachineWithDistanceProjection;
-import com.kaucjuszGo.domain.machines.dto.PageResponseDto;
-import com.kaucjuszGo.domain.machines.reviews.MachineReviewEntity;
-import com.kaucjuszGo.domain.machines.reviews.MachineReviewRepository;
-import com.kaucjuszGo.domain.machines.reviews.ReviewDto;
 import com.kaucjuszGo.util.LocationUtils;
 
 @Service
 public class MachineService {
     private final MachineRepository machineRepository;
-    private final MachineReviewRepository machineReviewRepository;
 
-    public MachineService(MachineRepository machineRepository, MachineReviewRepository machineReviewRepository) {
+    public MachineService(MachineRepository machineRepository) {
         this.machineRepository = machineRepository;
-        this.machineReviewRepository = machineReviewRepository;
     }
 
     public MachineEntity getMachineById(UUID machineId) {
@@ -35,21 +27,9 @@ public class MachineService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Machine not found"));
     }
 
-    public MachineDetailsResponseDto getMachineDetails(UUID id, Pageable pageable) {
+    public MachineDetailsResponseDto getMachineDetails(UUID id) {
         MachineEntity machine = machineRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Machine not found"));
-
-        Page<MachineReviewEntity> reviews = machineReviewRepository.findByMachine_Id(id, pageable);
-
-        Page<ReviewDto> reviewDtos = (reviews.map(review -> {
-            ReviewDto reviewDto = new ReviewDto();
-            reviewDto.setId(review.getId());
-            reviewDto.setRating(review.getRating());
-            reviewDto.setComment(review.getComment());
-            reviewDto.setUser(review.getUser() != null ? review.getUser().getNickname() : null);
-            reviewDto.setCreatedAt(review.getCreatedAt());
-            return reviewDto;
-        }));
 
         MachineDetailsResponseDto response = new MachineDetailsResponseDto();
         response.setId(machine.getId());
@@ -60,7 +40,6 @@ public class MachineService {
         response.setAverageRating(machine.getAverageRating());
         response.setReviewsCount(machine.getReviewsCount());
         response.setStatus(machine.getStatus());
-        response.setReviews(PageResponseDto.from(reviewDtos));
 
         return response;
     }

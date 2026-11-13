@@ -5,7 +5,6 @@ import java.util.UUID;
 
 import com.kaucjuszGo.domain.machines.MachineStatus;
 import com.kaucjuszGo.domain.machines.OpeningHours;
-import com.kaucjuszGo.domain.machines.reviews.ReviewDto;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -21,5 +20,4 @@ public class MachineDetailsResponseDto {
     private BigDecimal averageRating;
     private Integer reviewsCount;
     private MachineStatus status;
-    private PageResponseDto<ReviewDto> reviews;
 }
