@@ -3,8 +3,6 @@ package com.kaucjuszGo.domain.machines.dto;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-import org.springframework.data.domain.Page;
-
 import com.kaucjuszGo.domain.machines.MachineStatus;
 import com.kaucjuszGo.domain.machines.OpeningHours;
 import com.kaucjuszGo.domain.machines.reviews.ReviewDto;
@@ -23,5 +21,5 @@ public class MachineDetailsResponseDto {
     private BigDecimal averageRating;
     private Integer reviewsCount;
     private MachineStatus status;
-    private Page<ReviewDto> reviews;
+    private PageResponseDto<ReviewDto> reviews;
 }

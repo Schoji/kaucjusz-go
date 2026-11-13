@@ -14,6 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.kaucjuszGo.domain.machines.dto.MachineDetailsResponseDto;
 import com.kaucjuszGo.domain.machines.dto.MachineListResponseDto;
 import com.kaucjuszGo.domain.machines.dto.MachineWithDistanceProjection;
+import com.kaucjuszGo.domain.machines.dto.PageResponseDto;
 import com.kaucjuszGo.domain.machines.reviews.MachineReviewEntity;
 import com.kaucjuszGo.domain.machines.reviews.MachineReviewRepository;
 import com.kaucjuszGo.domain.machines.reviews.ReviewDto;
@@ -42,6 +43,16 @@ public class MachineService {
 
         Page<MachineReviewEntity> reviews = machineReviewRepository.findByMachine_Id(id, pageable);
 
+        Page<ReviewDto> reviewDtos = (reviews.map(review -> {
+            ReviewDto reviewDto = new ReviewDto();
+            reviewDto.setId(review.getId());
+            reviewDto.setRating(review.getRating());
+            reviewDto.setComment(review.getComment());
+            reviewDto.setUser(review.getUser() != null ? review.getUser().getNickname() : null);
+            reviewDto.setCreatedAt(review.getCreatedAt());
+            return reviewDto;
+        }));
+
         MachineDetailsResponseDto response = new MachineDetailsResponseDto();
         response.setId(machine.getId());
         response.setName(machine.getName());
@@ -51,15 +62,7 @@ public class MachineService {
         response.setAverageRating(machine.getAverageRating());
         response.setReviewsCount(machine.getReviewsCount());
         response.setStatus(machine.getStatus());
-        response.setReviews(reviews.map(review -> {
-            ReviewDto reviewDto = new ReviewDto();
-            reviewDto.setId(review.getId());
-            reviewDto.setRating(review.getRating());
-            reviewDto.setComment(review.getComment());
-            reviewDto.setUser(review.getUser() != null ? review.getUser().getNickname() : null);
-            reviewDto.setCreatedAt(review.getCreatedAt());
-            return reviewDto;
-        }));
+        response.setReviews(PageResponseDto.from(reviewDtos));
 
         return response;
     }
