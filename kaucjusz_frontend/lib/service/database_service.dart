@@ -1,3 +1,4 @@
+import 'package:kaucjusz_go/models/reviews.dart';
 import 'package:kaucjusz_go/models/vending_machine.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -20,7 +21,7 @@ class DatabaseService {
     LatLng coordinates,
     double radius,
   ) async {
-    final uri = Uri.parse("$databaseUrl/vending-machines/search").replace(
+    final uri = Uri.parse("$databaseUrl/vending-machines").replace(
       queryParameters: {
         "longitude": coordinates.longitude.toString(),
         "latitude": coordinates.latitude.toString(),
@@ -57,5 +58,21 @@ class DatabaseService {
 
     final data = jsonDecode(response.body);
     return VendingMachineDetails.fromJson(data as Map<String, dynamic>);
+  }
+
+  Future<Reviews> getReviews(String id) async {
+    final uri = Uri.parse("$databaseUrl/vending-machines/$id/reviews");
+
+    final response = await http.get(
+      uri,
+      headers: {"Authorization": "Bearer $token", "Accept": "application/json"},
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception("HTTP ${response.statusCode}: ${response.body}");
+    }
+
+    final data = jsonDecode(response.body);
+    return Reviews.fromJson(data as Map<String, dynamic>);
   }
 }

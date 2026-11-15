@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:kaucjusz_go/map/map_page.dart';
+import 'package:kaucjusz_go/map/widgets/rating_builder.dart';
+import 'package:kaucjusz_go/models/reviews.dart';
 import 'package:kaucjusz_go/models/vending_machine.dart';
 import 'package:kaucjusz_go/models/vending_machine_details.dart';
 import 'package:kaucjusz_go/widgets/theme_extensions.dart';
@@ -12,11 +13,13 @@ class DraggableSheet extends StatelessWidget {
     required this.sheetController,
     this.vendingMachine,
     this.detailsFuture,
+    this.reviewsFuture,
   });
 
   final DraggableScrollableController sheetController;
   final VendingMachine? vendingMachine;
   final Future<VendingMachineDetails>? detailsFuture;
+  final Future<Reviews>? reviewsFuture;
 
   @override
   Widget build(BuildContext context) {
@@ -105,7 +108,7 @@ class DraggableSheet extends StatelessWidget {
                               spacing: 8,
                               children: [
                                 Text(
-                                  machine.name,
+                                  "Kaucjomat ${machine.name}",
                                   style: t.textTheme.headlineMediumEmphasized,
                                 ),
                                 Text(
@@ -120,9 +123,7 @@ class DraggableSheet extends StatelessWidget {
                                 spacing: 8,
                                 children: [
                                   Text(
-                                    machine.averageRating
-                                        .roundToDouble()
-                                        .toString(),
+                                    machine.averageRating.toString(),
                                     style: t.textTheme.displayMediumEmphasized,
                                   ),
                                   Column(
@@ -133,7 +134,7 @@ class DraggableSheet extends StatelessWidget {
                                         rating: machine.averageRating,
                                       ),
                                       Text(
-                                        "2137 opinii",
+                                        "${machine.reviewsCount} opinie",
                                         style: t.textTheme.labelMedium,
                                       ),
                                     ],
@@ -169,6 +170,47 @@ class DraggableSheet extends StatelessWidget {
                                 ),
                               ],
                             ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Divider(),
+                                Text(
+                                  "Opinie",
+                                  style: t.textTheme.titleMediumEmphasized,
+                                ),
+                              ],
+                            ),
+                            FutureBuilder(
+                              future: reviewsFuture,
+                              builder: (context, asyncSnapshot) {
+                                if (asyncSnapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return CircularProgressIndicator();
+                                }
+
+                                final reviews = asyncSnapshot.data!.items;
+
+                                return Padding(
+                                  padding: const EdgeInsets.only(bottom: 20),
+                                  child: Column(
+                                    spacing: 20,
+                                    children: [
+                                      ...reviews.map(
+                                        (review) => UserReview(
+                                          review: Review(
+                                            id: review.id,
+                                            rating: review.rating,
+                                            user: review.user,
+                                            createdAt: review.createdAt,
+                                            comment: review.comment,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            ),
                           ],
                         ),
                       ),
@@ -183,30 +225,40 @@ class DraggableSheet extends StatelessWidget {
   }
 }
 
-class RatingBuilder extends StatelessWidget {
-  const RatingBuilder({super.key, required this.rating});
+class UserReview extends StatelessWidget {
+  const UserReview({super.key, required this.review});
 
-  final double rating;
+  final Review review;
 
   @override
   Widget build(BuildContext context) {
-    final roundedRating = rating.floor();
+    final t = Theme.of(context);
     return Row(
-      spacing: 12,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: 8,
       children: [
-        for (int i = 0; i < roundedRating; i++)
-          SvgPicture.asset(
-            "assets/rating_bottle_full.svg",
-            width: 36,
-            height: 36,
+        CircleAvatar(
+          backgroundColor: t.colorScheme.primaryContainer,
+          foregroundColor: t.colorScheme.onPrimaryContainer,
+          child: Icon(Icons.person_outline),
+        ),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            spacing: 8,
+            children: [
+              Row(
+                children: [
+                  Text(review.user, style: t.textTheme.labelLarge),
+                  Spacer(),
+                  Text("2 godz. temu", style: t.textTheme.labelMedium),
+                ],
+              ),
+              RatingBuilder.small(rating: review.rating),
+              if (review.comment != null) Text(review.comment!),
+            ],
           ),
-
-        for (int i = 0; i < 5 - roundedRating; i++)
-          SvgPicture.asset(
-            "assets/rating_bottle_empty.svg",
-            width: 36,
-            height: 36,
-          ),
+        ),
       ],
     );
   }

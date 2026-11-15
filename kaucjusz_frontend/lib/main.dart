@@ -42,9 +42,22 @@ class _MainAppState extends State<MainApp> {
 
   @override
   Widget build(BuildContext context) {
+    final t = Theme.of(context);
     return MaterialApp(
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFF376A3E)),
+        outlinedButtonTheme: OutlinedButtonThemeData(
+          style: OutlinedButton.styleFrom(
+            minimumSize: Size.fromHeight(56),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+              side: BorderSide(color: t.colorScheme.outlineVariant),
+            ),
+            textStyle: t.textTheme.titleMedium,
+            foregroundColor: t.colorScheme.onSurfaceVariant,
+            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          ),
+        ),
       ),
       home: Scaffold(
         appBar: _selectedIndex != 3 && _selectedIndex != 0 ? AppBar() : null,

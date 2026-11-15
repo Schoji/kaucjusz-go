@@ -3,18 +3,13 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kaucjusz_go/login/login_page.dart';
 import 'package:kaucjusz_go/map/widgets/draggable_sheet.dart';
+import 'package:kaucjusz_go/models/reviews.dart';
 import 'package:kaucjusz_go/models/vending_machine.dart';
 import 'package:kaucjusz_go/models/vending_machine_details.dart';
 import 'package:kaucjusz_go/service/database_service.dart';
 
 import 'package:latlong2/latlong.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-List<LatLng> mockMarkers = [
-  LatLng(53.4337, 14.5494),
-  LatLng(53.4268, 14.5531),
-  LatLng(53.4198, 14.5345),
-];
 
 const peekSize = 0.35;
 const maxSize = 0.92;
@@ -40,6 +35,7 @@ class _MapPageState extends State<MapPage> {
 
   late final Future<List<VendingMachine>> _vendingMachineFuture;
   Future<VendingMachineDetails>? _detailsFuture;
+  Future<Reviews>? _reviewsFuture;
 
   void onSheetChanged() {
     if (!sheetController.isAttached) {
@@ -106,13 +102,22 @@ class _MapPageState extends State<MapPage> {
                           alignment: Alignment.topCenter,
                           point: LatLng(machine.latitude, machine.longitude),
                           child: GestureDetector(
-                            onTap: () {
+                            onTap: () async {
+                              if (selectedMachine != machine) {
+                                await sheetController.animateTo(
+                                  0.0,
+                                  duration: Duration(milliseconds: 100),
+                                  curve: Curves.easeInOut,
+                                );
+                              }
                               setState(() {
                                 selectedMachine = machine;
                                 _detailsFuture = db.getVendingMachine(
                                   machine.id,
                                 );
+                                _reviewsFuture = db.getReviews(machine.id);
                               });
+
                               sheetController.animateTo(
                                 peekSize,
                                 duration: Duration(milliseconds: 100),
@@ -161,7 +166,7 @@ class _MapPageState extends State<MapPage> {
           ),
         ),
         Align(
-          alignment: AlignmentGeometry.bottomCenter,
+          alignment: AlignmentGeometry.centerRight,
           child: FloatingActionButton(
             onPressed: () => Navigator.push(
               context,
@@ -174,6 +179,7 @@ class _MapPageState extends State<MapPage> {
           vendingMachine: selectedMachine,
           detailsFuture: _detailsFuture,
           sheetController: sheetController,
+          reviewsFuture: _reviewsFuture,
         ),
       ],
     );
