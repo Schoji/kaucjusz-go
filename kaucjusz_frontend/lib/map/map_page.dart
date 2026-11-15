@@ -11,7 +11,6 @@ import 'package:kaucjusz_go/service/database_service.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-const peekSize = 0.35;
 const maxSize = 0.92;
 
 class MapPage extends StatefulWidget {
@@ -24,6 +23,7 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
+  double peekSize = 0.35;
   final db = DatabaseService();
   bool isOpen = false;
   bool wasOpen = false;
@@ -180,6 +180,18 @@ class _MapPageState extends State<MapPage> {
           detailsFuture: _detailsFuture,
           sheetController: sheetController,
           reviewsFuture: _reviewsFuture,
+          onPeekSizeChanged: (value) async {
+            setState(() {
+              peekSize = value;
+            });
+            if (selectedMachine != null) {
+              await sheetController.animateTo(
+                value,
+                duration: Duration(milliseconds: 100),
+                curve: Curves.easeInOut,
+              );
+            }
+          },
         ),
       ],
     );
