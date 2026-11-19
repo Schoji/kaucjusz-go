@@ -9,8 +9,8 @@ import com.kaucjuszGo.domain.machines.OpeningHours;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter 
-@Setter 
+@Getter
+@Setter
 public class MachineDetailsResponseDto {
     private UUID id;
     private String name;
@@ -20,4 +20,5 @@ public class MachineDetailsResponseDto {
     private BigDecimal averageRating;
     private Integer reviewsCount;
     private MachineStatus status;
+    private Integer userRating;
 }

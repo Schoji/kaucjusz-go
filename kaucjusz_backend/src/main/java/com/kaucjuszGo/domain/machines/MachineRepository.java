@@ -1,15 +1,19 @@
 package com.kaucjuszGo.domain.machines;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
 import org.locationtech.jts.geom.Point;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.kaucjuszGo.domain.machines.dto.MachineWithDistanceProjection;
+
+import jakarta.persistence.LockModeType;
 
 public interface MachineRepository extends JpaRepository<MachineEntity, UUID> {
         @Query("SELECT m.id AS id, m.name AS name, m.address AS address, m.photoUrl AS photoUrl, m.reviewsCount AS reviewsCount, "
@@ -33,4 +37,8 @@ public interface MachineRepository extends JpaRepository<MachineEntity, UUID> {
 
         @Query("SELECT m.externalId FROM MachineEntity m WHERE m.externalId IS NOT NULL")
         public Set<String> findAllExternalIds();
+
+        @Lock(LockModeType.PESSIMISTIC_WRITE)
+        @Query("SELECT m FROM MachineEntity m WHERE m.id = :id")
+        Optional<MachineEntity> findByIdForUpdate(@Param("id") UUID id);
 }
