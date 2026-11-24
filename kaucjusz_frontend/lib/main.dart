@@ -8,6 +8,7 @@ import 'package:kaucjusz_go/service/kaucjusz_service.dart';
 import 'package:kaucjusz_go/service/recent_search_service.dart';
 import 'package:kaucjusz_go/widgets/navigation_bar.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:kaucjusz_go/widgets/wallet_badge.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -65,7 +66,18 @@ class _MainAppState extends State<MainApp> {
         ),
       ),
       home: Scaffold(
-        appBar: _selectedIndex != 3 && _selectedIndex != 0 ? AppBar() : null,
+        appBar: _selectedIndex != 3 && _selectedIndex != 0
+            ? AppBar(
+                centerTitle: false,
+                title: switch (_selectedIndex) {
+                  2 => Text("Najwięksi kaucjusze"),
+                  1 => Text("Twój Kaucjusz"),
+                  _ => null,
+                },
+                actionsPadding: .symmetric(horizontal: 16),
+                actions: [WalletBadge()],
+              )
+            : null,
         extendBodyBehindAppBar: _selectedIndex == 3 ? true : false,
         body: _screens[_selectedIndex],
         extendBody: _selectedIndex == 0,

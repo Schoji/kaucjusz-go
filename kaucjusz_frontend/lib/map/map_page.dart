@@ -61,7 +61,7 @@ class _MapPageState extends State<MapPage> {
     if (selectedMachine != machine) {
       await sheetController.animateTo(
         0.0,
-        duration: Duration(milliseconds: 100),
+        duration: Duration(milliseconds: 250),
         curve: Curves.easeInOut,
       );
     }
@@ -149,8 +149,13 @@ class _MapPageState extends State<MapPage> {
                           point: LatLng(machine.latitude, machine.longitude),
                           child: GestureDetector(
                             onTap: () async => await selectMachine(machine),
-                            child: SvgPicture.asset(
-                              "assets/pin_bottle_light.svg",
+                            child: AnimatedScale(
+                              scale: selectedMachine == machine ? 1.3 : 1.0,
+                              duration: Duration(milliseconds: 150),
+                              curve: Curves.easeOutBack,
+                              child: SvgPicture.asset(
+                                "assets/pin_bottle_light.svg",
+                              ),
                             ),
                           ),
                         ),
