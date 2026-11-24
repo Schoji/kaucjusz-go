@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kaucjusz_go/map/map_page.dart';
+import 'package:kaucjusz_go/map/widgets/add_review.dart';
 import 'package:kaucjusz_go/map/widgets/rating_builder.dart';
 import 'package:kaucjusz_go/models/reviews.dart';
 import 'package:kaucjusz_go/models/vending_machine.dart';
@@ -161,34 +163,38 @@ class _DraggableSheetState extends State<DraggableSheet> {
                                           ),
                                         ],
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Row(
-                                          spacing: 8,
-                                          children: [
-                                            Text(
-                                              machine.averageRating.toString(),
-                                              style: t
-                                                  .textTheme
-                                                  .displayMediumEmphasized,
-                                            ),
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                RatingBuilder(
-                                                  rating: machine.averageRating,
-                                                ),
-                                                Text(
-                                                  "${machine.reviewsCount} opinie",
-                                                  style:
-                                                      t.textTheme.labelMedium,
-                                                ),
-                                              ],
-                                            ),
-                                          ],
+                                      if (machine.averageRating > 0.0)
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Row(
+                                            spacing: 8,
+                                            children: [
+                                              Text(
+                                                machine.averageRating
+                                                    .toString(),
+                                                style: t
+                                                    .textTheme
+                                                    .displayMediumEmphasized,
+                                              ),
+
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  RatingBuilder(
+                                                    rating:
+                                                        machine.averageRating,
+                                                  ),
+                                                  Text(
+                                                    "${machine.reviewsCount} opinie",
+                                                    style:
+                                                        t.textTheme.labelMedium,
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                      ),
                                       Row(
                                         spacing: 10,
                                         children: [
@@ -206,7 +212,14 @@ class _DraggableSheetState extends State<DraggableSheet> {
                                             ),
                                           ),
                                           FilledButton.icon(
-                                            onPressed: () {},
+                                            onPressed: () => Navigator.push(
+                                              context,
+                                              MaterialPageRoute<void>(
+                                                builder: (context) =>
+                                                    const AddReview(),
+                                              ),
+                                            ),
+
                                             icon: Icon(Icons.edit),
                                             label: Text("Dodaj opinię"),
                                             style: FilledButton.styleFrom(
@@ -223,16 +236,39 @@ class _DraggableSheetState extends State<DraggableSheet> {
                                     ],
                                   ),
                                 ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Divider(),
-                                    Text(
-                                      "Opinie",
-                                      style: t.textTheme.titleMediumEmphasized,
-                                    ),
-                                  ],
-                                ),
+                                if (machine.averageRating > 0.0)
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Divider(),
+                                      Text(
+                                        "Opinie",
+                                        style:
+                                            t.textTheme.titleMediumEmphasized,
+                                      ),
+                                    ],
+                                  )
+                                else
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    spacing: 4,
+                                    children: [
+                                      SvgPicture.asset(
+                                        "assets/shrug_bottle_light.svg",
+                                      ),
+                                      Text(
+                                        "Ten kaucjomat nie ma jeszcze żadnej opinii",
+                                        style: t.textTheme.titleMedium,
+                                      ),
+                                      Text(
+                                        "Bądź pierwszą osobą, która podzieli się swoją opinią i pomoże innym!",
+                                        style: t.textTheme.bodyMedium,
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ],
+                                  ),
                                 FutureBuilder(
                                   future: widget.reviewsFuture,
                                   builder: (context, asyncSnapshot) {

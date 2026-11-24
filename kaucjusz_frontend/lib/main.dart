@@ -4,6 +4,7 @@ import 'package:kaucjusz_go/pet/pet_page.dart';
 import 'package:kaucjusz_go/map/map_page.dart';
 import 'package:kaucjusz_go/rank/rank_page.dart';
 import 'package:kaucjusz_go/receipt/receipt_page.dart';
+import 'package:kaucjusz_go/service/kaucjusz_service.dart';
 import 'package:kaucjusz_go/widgets/navigation_bar.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -12,6 +13,8 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  final kaucjusz = KaucjuszService();
+  kaucjusz.loop();
   runApp(const MainApp());
 }
 

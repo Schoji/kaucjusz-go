@@ -33,3 +33,6 @@ flutter:
   uses-material-design: true
   assets: 
     - assets/
+    - assets/kaucjusz_junior/
+    - assets/kaucjusz_adult/
+    - assets/kaucjusz_baby/

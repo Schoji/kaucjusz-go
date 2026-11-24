@@ -1,4 +1,5 @@
 import 'package:kaucjusz_go/models/reviews.dart';
+import 'package:kaucjusz_go/models/user_sync.dart';
 import 'package:kaucjusz_go/models/vending_machine.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -74,5 +75,26 @@ class DatabaseService {
 
     final data = jsonDecode(response.body);
     return Reviews.fromJson(data as Map<String, dynamic>);
+  }
+
+  Future<UserSync> syncUser(String nickname, String region) async {
+    final uri = Uri.parse("$databaseUrl/users/sync");
+
+    final response = await http.post(
+      uri,
+      headers: {
+        "Authorization": "Bearer $token",
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+      body: jsonEncode({"nickname": nickname, "region": region}),
+    );
+
+    if (response.statusCode != 200 && response.statusCode != 201) {
+      throw Exception("HTTP ${response.statusCode}: ${response.body}");
+    } // todo: deal with 409
+
+    final data = jsonDecode(response.body);
+    return UserSync.fromJson(data as Map<String, dynamic>);
   }
 }
