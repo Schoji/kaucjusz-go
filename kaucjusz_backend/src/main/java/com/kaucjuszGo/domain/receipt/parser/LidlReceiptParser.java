@@ -45,7 +45,7 @@ public class LidlReceiptParser implements ReceiptParser {
         int depositGrosze = Integer.parseInt(matcher.group(2));
         int totalGrosze = nonDepositGrosze + depositGrosze;
 
-        ReceiptScanStatus status = depositGrosze > 0
+        ReceiptScanStatus status = totalGrosze > 0
                 ? ReceiptScanStatus.ZAAKCEPTOWANY
                 : ReceiptScanStatus.ODRZUCONY;
 

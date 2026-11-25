@@ -99,7 +99,7 @@ class ReceiptHasherTest {
         var kaufland = new ParsedReceipt(
                 RetailOperator.KAUFLAND,
                 ReceiptScanStatus.DO_WERYFIKACJI,
-                "8670484904184040088001027286",
+                "9670484904184040068001027286",
                 null,
                 null,
                 null
@@ -110,7 +110,7 @@ class ReceiptHasherTest {
         assertNotNull(result.barcodeHash());
         assertNotNull(result.receiptFingerprintHash());
         assertEquals(
-                "KAUFLAND|8670484904184040088001027286|NULL|NULL|NULL|NULL|NULL|NULL|NULL|NULL|NULL|NULL",
+                "KAUFLAND|9670484904184040068001027286|NULL|NULL|NULL|NULL|NULL|NULL|NULL|NULL|NULL|NULL",
                 result.canonicalPayload()
         );
     }

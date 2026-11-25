@@ -31,7 +31,7 @@ public class FallbackReceiptParser implements ReceiptParser {
         }
 
         String barcode = extraction.rawBarcode();
-        RetailOperator operator = (barcode.length() == 28 && barcode.startsWith("86704849041840"))
+        RetailOperator operator = (barcode.length() == 28 && barcode.startsWith("96704849041840"))
                 ? RetailOperator.KAUFLAND
                 : RetailOperator.UNKNOWN;
 

@@ -16,20 +16,20 @@ class FallbackReceiptParserTest {
 
     @Test
     void shouldAlwaysSupportAnyExtraction() {
-        assertTrue(parser.supports(new RawReceiptExtraction("8670484904184040088001027286", "CODE_128")));
+        assertTrue(parser.supports(new RawReceiptExtraction("9670484904184040068001027286", "CODE_128")));
         assertTrue(parser.supports(new RawReceiptExtraction(null, null)));
         assertTrue(parser.supports(null));
     }
 
     @Test
     void shouldRecognizeKauflandAndSendToVerification() {
-        var extraction = new RawReceiptExtraction("8670484904184040088001027286", "CODE_128");
+        var extraction = new RawReceiptExtraction("9670484904184040068001027286", "CODE_128");
 
         ParsedReceipt result = parser.parse(extraction);
 
         assertEquals(RetailOperator.KAUFLAND, result.operator());
         assertEquals(ReceiptScanStatus.DO_WERYFIKACJI, result.status());
-        assertEquals("8670484904184040088001027286", result.rawBarcode());
+        assertEquals("9670484904184040068001027286", result.rawBarcode());
         assertNull(result.depositAmountGrosze());
     }
 
