@@ -41,9 +41,9 @@ public class RankingService {
 
     public RankingResponseDto getPetRanking(Pageable pageable, boolean isLocal){
         Sort rankingSort = Sort.by(
-            Sort.Order.desc("level"),
-            Sort.Order.desc("experience"),
-            Sort.Order.asc("createdAt")
+            Sort.Order.desc(PetEntity::getLevel),
+            Sort.Order.desc(PetEntity::getExperience),
+            Sort.Order.asc(PetEntity::getCreatedAt)
         );
         Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), rankingSort);
 
