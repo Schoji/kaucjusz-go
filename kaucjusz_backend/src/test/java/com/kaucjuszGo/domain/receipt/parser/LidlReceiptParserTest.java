@@ -40,16 +40,29 @@ class LidlReceiptParserTest {
     }
 
     @Test
-    void shouldRejectReceiptWithZeroDepositAmount() {
+    void shouldAcceptReceiptWithOnlyNonDepositAmount() {
         var extraction = new RawReceiptExtraction("201000102000001712165021", "CODE_128");
+
+        ParsedReceipt result = parser.parse(extraction);
+
+        assertEquals(RetailOperator.LIDL, result.operator());
+        assertEquals(ReceiptScanStatus.ZAAKCEPTOWANY, result.status());
+        assertEquals(0, result.depositAmountGrosze());
+        assertEquals(10, result.nonDepositAmountGrosze());
+        assertEquals(10, result.totalAmountGrosze());
+    }
+
+    @Test
+    void shouldRejectReceiptWithZeroTotalAmount() {
+        var extraction = new RawReceiptExtraction("201000002000001712165021", "CODE_128");
 
         ParsedReceipt result = parser.parse(extraction);
 
         assertEquals(RetailOperator.LIDL, result.operator());
         assertEquals(ReceiptScanStatus.ODRZUCONY, result.status());
         assertEquals(0, result.depositAmountGrosze());
-        assertEquals(10, result.nonDepositAmountGrosze());
-        assertEquals(10, result.totalAmountGrosze());
+        assertEquals(0, result.nonDepositAmountGrosze());
+        assertEquals(0, result.totalAmountGrosze());
     }
 }
 

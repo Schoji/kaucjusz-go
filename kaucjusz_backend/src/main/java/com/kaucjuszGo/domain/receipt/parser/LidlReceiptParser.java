@@ -2,6 +2,7 @@ package com.kaucjuszGo.domain.receipt.parser;
 
 import java.util.regex.Pattern;
 
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import com.kaucjuszGo.domain.receipt.ReceiptScanStatus;
@@ -9,6 +10,7 @@ import com.kaucjuszGo.domain.receipt.RetailOperator;
 import com.kaucjuszGo.domain.receipt.reader.RawReceiptExtraction;
 
 @Component
+@Order(10)
 public class LidlReceiptParser implements ReceiptParser {
 
     private static final Pattern LIDL_BARCODE_PATTERN =
@@ -43,7 +45,7 @@ public class LidlReceiptParser implements ReceiptParser {
         int depositGrosze = Integer.parseInt(matcher.group(2));
         int totalGrosze = nonDepositGrosze + depositGrosze;
 
-        ReceiptScanStatus status = depositGrosze > 0
+        ReceiptScanStatus status = totalGrosze > 0
                 ? ReceiptScanStatus.ZAAKCEPTOWANY
                 : ReceiptScanStatus.ODRZUCONY;
 
