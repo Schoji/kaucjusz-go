@@ -4,6 +4,8 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.util.UUID;
 
+import com.kaucjuszGo.core.exception.InsufficientPointsException;
+import com.kaucjuszGo.core.exception.InvalidPointOperationException;
 import com.kaucjuszGo.domain.pet.PetEntity;
 
 import jakarta.persistence.CascadeType;
@@ -93,5 +95,27 @@ public class UserEntity {
 
     public void setTotalPoints(Integer totalPoints) {
         this.lifetimePoints = totalPoints;
+    }
+
+    public void creditPoints(int amount) {
+        if (amount <= 0) {
+            throw new InvalidPointOperationException("Invalid point operation");
+        }
+
+        this.setCurrentPoints(Math.addExact(this.currentPoints, amount));
+        this.setLifetimePoints(Math.addExact(this.lifetimePoints, amount));
+    }
+
+    public void debitPoints(int amount) {
+        if (amount <= 0) {
+            throw new InvalidPointOperationException("Invalid point operation");
+        }
+
+        if (currentPoints < amount) {
+            throw new InsufficientPointsException(
+                    "Insufficient points - missing " + (amount - currentPoints) + " points");
+        }
+
+        this.setCurrentPoints(Math.subtractExact(this.currentPoints, amount));
     }
 }

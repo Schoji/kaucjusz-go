@@ -1,12 +1,14 @@
 package com.kaucjuszGo.domain.user;
 
+import java.util.UUID;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.kaucjuszGo.domain.pet.PetEntity;
-
-import jakarta.transaction.Transactional;
 
 @Service
 public class UserService {
@@ -35,7 +37,7 @@ public class UserService {
 
         if (userEntity == null) {
             if (userRepository.existsByNickname(nickname)) {
-                throw new org.springframework.web.server.ResponseStatusException(
+                throw new ResponseStatusException(
                         HttpStatus.CONFLICT, "Nickname is already taken");
             }
 
@@ -67,5 +69,17 @@ public class UserService {
         userDto.setCurrentStreak(userEntity.getCurrentStreak());
 
         return userDto;
+    }
+
+    @Transactional(propagation = Propagation.MANDATORY)
+    public UserEntity getActiveUserForUpdate(UUID userId) {
+
+        UserEntity user = userRepository.findByIdForUpdate(userId).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+
+        if (user.getDeletedAt() != null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+        }
+        return user;
     }
 }
