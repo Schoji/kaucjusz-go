@@ -5,7 +5,6 @@ import java.util.UUID;
 
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,13 +48,12 @@ public class MachineController {
     // Get all machines - KGO-39
     @GetMapping
     public ResponseEntity<List<MachineListResponseDto>> getMachines(
-            @RequestParam Double latitude, 
+            @RequestParam Double latitude,
             @RequestParam Double longitude,
-            @RequestParam(required = false) Double radius, 
+            @RequestParam(required = false) Double radius,
             @RequestParam(required = false) String query,
-            @RequestParam(required = false) Boolean isOpen, 
-            @RequestParam(required = false) Boolean isTopRated
-        ) {
+            @RequestParam(required = false) Boolean isOpen,
+            @RequestParam(required = false) Boolean isTopRated) {
         List<MachineListResponseDto> machines = machineService.getMachines(latitude, longitude, radius, query, isOpen,
                 isTopRated);
         return ResponseEntity.ok(machines);
@@ -63,10 +61,10 @@ public class MachineController {
 
     @GetMapping("/{id}/reviews")
     public ResponseEntity<PageResponseDto<ReviewDto>> getMachineReviews(
-        @PathVariable("id") UUID id,
-        @ParameterObject @PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
-    return ResponseEntity.ok(machineReviewService.getReviewsForMachine(id, pageable));
-}  
+            @PathVariable("id") UUID id,
+            @ParameterObject @PageableDefault(page = 0, size = 20) Pageable pageable) {
+        return ResponseEntity.ok(machineReviewService.getReviewsForMachine(id, pageable));
+    }
 
     // Import machines from external source - KGO-38
     @PostMapping("/import")
@@ -78,7 +76,7 @@ public class MachineController {
     @PostMapping("/{id}/reviews")
     public ResponseEntity<Void> addReview(@PathVariable("id") UUID machineId,
             @RequestBody @Valid ReviewRequestDto request) {
-        machineReviewService.addOrUpdateReview(machineId, request.getRating(), request.getComment());
+        machineReviewService.addReview(machineId, request.getRating(), request.getComment());
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }

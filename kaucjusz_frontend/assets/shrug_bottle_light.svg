@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <!-- motion lines -->
+  <g stroke="#9BAEA2" stroke-width="2.5">
+    <path d="M62 56 L68 64"/><path d="M56 70 L65 73"/><path d="M58 84 L66 83"/>
+  </g>
+  <!-- arms -->
+  <g stroke="#2F3A34" stroke-width="3.5">
+    <path d="M84 110 Q72 118 62 106"/><path d="M62 106 L56 100 M62 106 L58 98 M62 106 L63 98"/>
+    <path d="M132 110 Q144 118 154 106"/><path d="M154 106 L160 100 M154 106 L158 98 M154 106 L153 98"/>
+  </g>
+  <!-- bottle -->
+  <rect x="98" y="28" width="20" height="14" rx="3" fill="#E7EFE9" stroke="#3E5E47" stroke-width="2.5"/>
+  <path d="M98 36 H118" stroke="#3E5E47" stroke-width="1.5"/>
+  <path d="M100 42 H116 V50 C116 57 134 60 134 75 V132 Q134 143 123 143 H93 Q82 143 82 132 V75 C82 60 100 57 100 50 Z" fill="#FFFFFF" stroke="#3E5E47" stroke-width="2.5"/>
+  <path d="M89 80 V126" stroke="#DCE6DF" stroke-width="3"/>
+  <!-- face -->
+  <circle cx="101" cy="96" r="2.6" fill="#2F3A34"/>
+  <circle cx="115" cy="96" r="2.6" fill="#2F3A34"/>
+  <path d="M104 106 H112" stroke="#2F3A34" stroke-width="2.2"/>
+  <!-- speech bubble -->
+  <path d="M168 30 H206 Q218 30 218 42 V56 Q218 68 206 68 H178 L166 78 L169 67 Q158 64 158 54 V42 Q158 30 168 30 Z" fill="#FFFFFF" stroke="#3E5E47" stroke-width="2.5"/>
+  <g fill="#2F3A34"><circle cx="177" cy="49" r="3"/><circle cx="188" cy="49" r="3"/><circle cx="199" cy="49" r="3"/></g>
+</svg>

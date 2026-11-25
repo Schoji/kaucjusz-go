@@ -46,7 +46,9 @@ class _ReceiptPageState extends State<ReceiptPage> {
 
   @override
   void dispose() {
-    controllerFuture.then((c) => c.dispose());
+    controllerFuture
+        .then((c) => c.dispose())
+        .catchError((error) => print(error));
     super.dispose();
   }
 

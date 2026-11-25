@@ -2,6 +2,9 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'vending_machine.g.dart';
 
+@JsonEnum(fieldRename: FieldRename.screamingSnake)
+enum MachineStatus { active, outOfService }
+
 @JsonSerializable()
 class VendingMachine {
   final String id;
@@ -12,6 +15,8 @@ class VendingMachine {
   final double distance;
   final double averageRating;
   final String? photoUrl;
+  final int reviewsCount;
+  final MachineStatus status;
 
   VendingMachine({
     required this.id,
@@ -22,6 +27,8 @@ class VendingMachine {
     required this.distance,
     required this.averageRating,
     required this.photoUrl,
+    required this.reviewsCount,
+    required this.status,
   });
 
   factory VendingMachine.fromJson(Map<String, dynamic> json) =>

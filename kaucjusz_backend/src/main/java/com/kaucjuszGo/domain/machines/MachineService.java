@@ -12,14 +12,22 @@ import org.springframework.web.server.ResponseStatusException;
 import com.kaucjuszGo.domain.machines.dto.MachineDetailsResponseDto;
 import com.kaucjuszGo.domain.machines.dto.MachineListResponseDto;
 import com.kaucjuszGo.domain.machines.dto.MachineWithDistanceProjection;
+import com.kaucjuszGo.domain.machines.reviews.MachineReviewRepository;
+import com.kaucjuszGo.domain.user.UserEntity;
+import com.kaucjuszGo.domain.user.UserService;
 import com.kaucjuszGo.util.LocationUtils;
 
 @Service
 public class MachineService {
+    private final MachineReviewRepository machineReviewRepository;
     private final MachineRepository machineRepository;
+    private final UserService userService;
 
-    public MachineService(MachineRepository machineRepository) {
+    public MachineService(MachineRepository machineRepository, UserService userService,
+            MachineReviewRepository machineReviewRepository) {
         this.machineRepository = machineRepository;
+        this.userService = userService;
+        this.machineReviewRepository = machineReviewRepository;
     }
 
     public MachineEntity getMachineById(UUID machineId) {
@@ -31,6 +39,10 @@ public class MachineService {
         MachineEntity machine = machineRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Machine not found"));
 
+        UserEntity user = userService.getCurrentUser();
+
+        Integer userMachineRating = machineReviewRepository.findNewestMachineRatingById(id, user.getId());
+
         MachineDetailsResponseDto response = new MachineDetailsResponseDto();
         response.setId(machine.getId());
         response.setName(machine.getName());
@@ -40,6 +52,7 @@ public class MachineService {
         response.setAverageRating(machine.getAverageRating());
         response.setReviewsCount(machine.getReviewsCount());
         response.setStatus(machine.getStatus());
+        response.setUserRating(userMachineRating);
 
         return response;
     }
@@ -69,5 +82,10 @@ public class MachineService {
             return dto;
 
         }).collect(Collectors.toList());
+    }
+
+    public MachineEntity getMachineByIdForUpdate(UUID machineId) {
+        return machineRepository.findByIdForUpdate(machineId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Machine not found"));
     }
 }

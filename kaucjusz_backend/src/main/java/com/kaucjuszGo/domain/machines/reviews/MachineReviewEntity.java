@@ -16,18 +16,12 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(
-    name = "machine_reviews",
-    uniqueConstraints = {
-        @UniqueConstraint(name = "uq_machine_reviews_machine_user", columnNames = {"machine_id", "user_id"})
-    }
-)
+@Table(name = "machine_reviews")
 @Getter
 @Setter
 @NoArgsConstructor

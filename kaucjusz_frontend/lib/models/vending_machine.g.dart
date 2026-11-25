@@ -16,6 +16,8 @@ VendingMachine _$VendingMachineFromJson(Map<String, dynamic> json) =>
       distance: (json['distance'] as num).toDouble(),
       averageRating: (json['averageRating'] as num).toDouble(),
       photoUrl: json['photoUrl'] as String?,
+      reviewsCount: (json['reviewsCount'] as num).toInt(),
+      status: $enumDecode(_$MachineStatusEnumMap, json['status']),
     );
 
 Map<String, dynamic> _$VendingMachineToJson(VendingMachine instance) =>
@@ -28,4 +30,11 @@ Map<String, dynamic> _$VendingMachineToJson(VendingMachine instance) =>
       'distance': instance.distance,
       'averageRating': instance.averageRating,
       'photoUrl': instance.photoUrl,
+      'reviewsCount': instance.reviewsCount,
+      'status': _$MachineStatusEnumMap[instance.status]!,
     };
+
+const _$MachineStatusEnumMap = {
+  MachineStatus.active: 'ACTIVE',
+  MachineStatus.outOfService: 'OUT_OF_SERVICE',
+};

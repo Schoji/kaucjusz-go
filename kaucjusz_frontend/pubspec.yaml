@@ -20,6 +20,7 @@ dependencies:
   http: ^1.6.0
   json_annotation: ^4.12.0
   latlong2: ^0.10.1
+  shared_preferences: ^2.5.6
   url_launcher: ^6.3.3
 
 dev_dependencies:
@@ -33,3 +34,6 @@ flutter:
   uses-material-design: true
   assets: 
     - assets/
+    - assets/kaucjusz_junior/
+    - assets/kaucjusz_adult/
+    - assets/kaucjusz_baby/
